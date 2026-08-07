@@ -1,49 +1,67 @@
 import random
 
-options = ("paper", "rock", "scissor")
-score = 0
+options = ("rock", "paper", "scissor")
+
+player_score = 0
 computer_score = 0
+round_no = 1
 running = True
 
-while running:
-    player = None
-    computer = random.choice(options)
-    
-    # 1. This loop ONLY handles securing a valid user input
-    while player not in options:
-        player = input("choose any one (rock, scissor, paper):- ").lower().strip()
-        if player not in options:
-            print("Invalid choice! Please try again.")
+# Dictionary that stores which choice beats which
+wins = {
+    "rock": "scissor",
+    "paper": "rock",
+    "scissor": "paper"
+}
 
-    # 2. Reveal choices AFTER a valid input is guaranteed
-    print(f"\ncomputer choice:- {computer}")
-    print(f"your choice:- {player}")
-    
-    # 3. Game Logic (Moved safely outside the input validation loop)
-    if player == "paper" and computer == "rock":
-        print("congratulations! you won")
-        score += 1
-    elif player == "rock" and computer == "scissor":
-        print("congratulations! you won")
-        score += 1
-    elif player == "scissor" and computer == "paper":
-        print("congratulations! you won")
-        score += 1
-    elif computer == player:
-        print("match tie")
+while running:
+    print(f"\n========== Round {round_no} ==========")
+
+    computer = random.choice(options)
+    player = None
+
+    # Get valid input
+    while player not in options:
+        player = input("Choose (rock, paper, scissor): ").lower().strip()
+
+        if player not in options:
+            print("❌ Invalid choice! Try again.")
+
+    print(f"\nYour Choice     : {player}")
+    print(f"Computer Choice : {computer}")
+
+    # Decide winner
+    if player == computer:
+        print("🤝 It's a Tie!")
+    elif wins[player] == computer:
+        print("🎉 You Won!")
+        player_score += 1
     else:
-        print("you loose\nbetter luck next time")
+        print("💻 Computer Won!")
         computer_score += 1
 
-    # 4. Display running scoreboard
-    print(f"your score:- {score}")
-    print(f"computer score:- {computer_score}\n")
-    
-    # 5. Safe prompt to continue or break out of the outer loop
-    play_again = input("do you wanna play again (yes/no):- ").lower().strip()
+    # Scoreboard
+    print("\n------ Scoreboard ------")
+    print(f"You      : {player_score}")
+    print(f"Computer : {computer_score}")
+
+    play_again = input("\nPlay again? (yes/no): ").lower().strip()
+
     if play_again != "yes":
         running = False
 
-print("\nThanks for playing! Final Score:")
-print(f"You: {score} | Computer: {computer_score}")
+    round_no += 1
 
+print("\n========== GAME OVER ==========")
+print(f"Final Score")
+print(f"You      : {player_score}")
+print(f"Computer : {computer_score}")
+
+if player_score > computer_score:
+    print("🏆 Congratulations! You are the overall winner!")
+elif computer_score > player_score:
+    print("😔 Computer wins the game!")
+else:
+    print("🤝 The game ended in a tie!")
+
+print("Thanks for playing!")
